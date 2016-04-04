@@ -21,9 +21,11 @@
 % 若需按照中文文献在前，英文文献在后排序，请设置“sorting = centy”；
 % 若需按照引用顺序排序，请设置“sorting = none”。
 \usepackage[backend = biber, style = caspervector, utf8, sorting = none]{biblatex}
+%\usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage{multirow}
 
 \graphicspath{{../figure/}}
-\DeclareGraphicsExtensions{.eps,.pdf}
+\DeclareGraphicsExtensions{.eps,.pdf, .jpg}
 
 % 按学校要求设定参考文献列表中的条目之内及之间的距离。
 \setlength{\bibitemsep}{3bp}
@@ -76,11 +78,14 @@
 	\include{chap/introduction}
 	% 各章节。
 	\include{chap/chap1}
+	\include{chap/chap2}
+	\include{chap/chap3}
+	\include{chap/chap4}
 	% 结论。
 	\include{chap/conclusion}
 
 	% 正文中的附录部分。
-	\appendix
+%	\appendix
 	% 排版参考文献列表。
 	\printbibliography[
 		% 使“参考文献”出现在目录中；如果同时要使参考文献列表参与章节编号，
@@ -96,7 +101,7 @@
 		sorting = ecnty
 	]
 	% 各附录。
-	\include{chap/encl1}
+%	\include{chap/encl1}
 
 	% 以下为正文之后的部分，默认不进行章节编号。
 	\backmatter
