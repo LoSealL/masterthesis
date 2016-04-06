@@ -3,11 +3,26 @@
 % Public domain.
 
 \begin{cabstract}
-	% 中文测试文字。
+信息安全是现在各项系统设计重中之重，单向函数是信息安全协议的基础之一。物理不可克隆函数（PUF）是实现单向函数的一种物理手段，利用未知物理系统的观测点实现激励到响应的映射函数。
+PUF适合于有安全性需求的移动端芯片，有着低功耗、高集成度、高安全性等特点。
+
+本文分析、研究PUF在电路系统的实现，利用统计方法对现有的多种PUF方案进行分析对比，建立数学模型描述电路行为，并从模型特征总结出各PUF优劣。
+本文提出了两种新型PUF设计方案，其一结合了仲裁型PUF和双稳态PUF的优点，改进了双稳态PUF响应存在偏置的不足，且在FPGA上实现了电路并采样验证。
+其二设计的随机脉冲采样PUF，利用短脉冲传播的不稳定特性，引入随机变量，使得电路行为更加难以建模预测，增强了其抵御建模攻击的能力；同时通过真负边沿采样异或运算，增加了建模的空间复杂度，使得攻击者需要极大量的运算代价对此结构进行建模。最终实验结果显示，设计二具有极好的统计结果和抗建模攻击的能力，其面积开销也是标准2-XOR PUF的一半。
+
+最后本文比较了新提出结构在内的多个PUF的统计分布、NIST测试结果和SVM预测结果。
 	
 \end{cabstract}
 
 \begin{eabstract}
-	Test of the English abstract.
+Modern system design concerns more and more about security. As one of the basic foundation of crypto-protocols, one-way function and its implementation takes efforts to do so. Physical Unclonable Functions (PUF) is an alternative to one-way function. PUF ultilizes physical system which is unknown to mankind to set up a projection from challenges to responses. This physical disorder based system, which has low energy consumption and high density, is quite suitable for security portable chips.
+
+In this paper, we analyze and implment PUF in Field Programmable Gate Array, and investigate the randomness, uniqueness and reliability of the PUFs.
+We also build models for these PUFs and extract characteristics from the model.
+We propose two novel PUF designs. One of them combines the advantage of arbiter PUF and bistable ring PUF, the experiments on FPGA demonstrate it improves the randomness and uniqueness compared to BRPUF.
+The other one refered to as random pulse based arbiter PUF, introduces a random bit with a random input pulse signal to confuse the one who wants to model it. The experiment results show the propsoed RPAPUF has a significant increment on space and time complexity of building a model for it.
+
+In the end, we summarize the NIST test results and SVM learning results for all mentioned PUFs.
+
 \end{eabstract}
 
