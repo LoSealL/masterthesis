@@ -112,7 +112,7 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 \end{equation}
 
 假设一种理想模型，即在 PAPUF 的 CRP 中``1''严格地占50\%；而在 RPAPUF 中，随机码 s 严格遵循均匀分布。
-则在 RPAPUF 中将整个 CRP 集合分为3个子集，记作 $ {P_{0}, P_{1}, P_{2} $ ，分别表示脉冲信号都完整传递的 CRP 集合、有且仅有一种脉冲信号完整传递的 CRP 集合和两种脉冲信号全都消失的 CRP 集合。
+则在 RPAPUF 中将整个 CRP 集合分为3个子集，记作 $ P_{0}, P_{1}, P_{2} $ ，分别表示脉冲信号都完整传递的 CRP 集合、有且仅有一种脉冲信号完整传递的 CRP 集合和两种脉冲信号全都消失的 CRP 集合。
 对于 $ P_0 $， 有响应 $ R(i) = f_{xor}(C_i) $, $ f_{xor} $ 即 XOR PUF 的表征模型，具体参见\ref{subsec:xormethod}节的内容。
 而对于 $ P_2 $, 有 $ R(i) = s $。
 最后对于 $ P_1 $，若负脉冲没有传递到寄存器，则 $ R(i)= f_{xor}(C_i)+s $ ； 若正脉冲没有传递到寄存器，则 $ R(i)=f_{xor}(C_i)\cdot s $ 。
@@ -220,21 +220,21 @@ RPAPUF		& $ 2^{N-1} $ & - & N个交换器 		   \\
 \hline
 NIST Test & Arbiter & 2-XOR & BRPUF & 4-DBRPUF & RPAPUF \\
 \hline
-Frequency & & & & &\\
-Block Frequency & & & & &\\
-Cumulative Sums & & & & &\\
-Runs & & & & &\\
-Longest Run & & & & &\\
-Rank & & & & &\\
-FFT & & & & &\\
-Universal & & & & &\\
-Approximate Entropy & & & & &\\
-Serial & & & & &\\
-Linear Complexity & & & & &\\
-Random Excursions & & & & &\\
-Random Excursions Variant & & & & &\\
-Overlapping Template & & & & &\\
-Nonperiodic Template & & & & &\\
+Frequency & 7 & 15 & 2 & 8 & 7\\
+Block Frequency & 29 & 25 & 5 & 20 & 29\\
+Cumulative Sums & 7 & 15 & 2 & 7.5 & 7.5\\
+Runs & 12 & 17 & 5 & 11 & 13 \\
+Longest Run & 33 & 27 & 4 & 20 & 29 \\
+Rank & 99 & 100 & 71 & 99 & 100\\
+FFT & 84 & 78 & 17 & 50 & 83 \\
+Universal & 0 & 0 & 0 & 0 & 0 \\
+Approximate Entropy & 39 & 32 & 4 & 19 & 37\\
+Serial & 87.5 & 83.5 & 22.5 & 58 & 86.5\\
+Linear Complexity & 100 & 98 & 90 & 98 &99 \\
+Random Excursions & - & - & - & - &\\
+Random Excursions Variant & - & - & - & - &\\
+Overlapping Template & 61 & 55 & 10 & 28 & 53 \\
+Nonperiodic Template & 88.4 & 86.4 & 34.0 & 70.1 & 88.3\\
 \hline
 \end{tabular}
 \end{table}
@@ -257,7 +257,7 @@ Nonperiodic Template & & & & &\\
 
 \begin{figure}[htb!]
 \centering
-%\includegraphics[width=.8\linewidth]{svm_all}
+\includegraphics[width=.8\linewidth]{svm_all}
 \caption{不同PUF SVM预测率对比}
 \label{fig:svm_all}
 \end{figure}
