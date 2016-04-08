@@ -116,7 +116,7 @@ $ ||w||=\sqrt{w_1^2+w_2^2+...+w_n^2} $
 将数据由n维空间映射到$ n+k $维，使得在$ n+k $为空间中数据线性可分。
 
 \subsection{SVM与PUF}
-如果PUF的模型是$ r=f(c)=sgn(\omega'c+b) $的形式，其中r是响应，c是激励，$ \omega $是PUF内在属性，$ sgn() $是一个符号函数。可以看出$ g(c)=\omega'c+b=0 $便类似于SVM中的超平面，在c所在空间中，$ g(c) $将向量c按标签r分为了两类。通过SVM找到使$ \gamma=\frac{g(c)}{||\omega||} $最大的$ \omega $，以使模型达到最大可信度。SVM的求解过程在Matlab中以SMO算法封装实现，而且求解过程并不是本文的关注点，所以不在这里赘述。
+如果 PUF 的模型是 $ r=f(c)=sgn(\omega'c+b) $ 的形式，其中 r 是响应，c 是激励，$ \omega $ 是 PUF 内在属性，$ sgn() $是一个符号函数。可以看出 $ g(c)=\omega'c+b=0 $ 便类似于 SVM 中的超平面，在 c 所在空间中，$ g(c) $将向量 c 按标签 r 分为了两类。通过 SVM 找到使 $ \gamma=\frac{g(c)}{||\omega||} $最大的$ \omega $，以使模型达到最大可信度。 SVM 的求解过程在 Matlab 中以 SMO 算法封装实现，而且求解过程并不是本文的关注点，所以不在这里赘述。
 
 
 \section{相关工作}\label{sec:relatedwork}
