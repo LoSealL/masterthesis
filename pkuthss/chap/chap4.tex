@@ -193,7 +193,7 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 
 \section{几种PUF结构横向对比暨本章小结}\label{sec:rpa_summary}
 本节提出并分析了新型随机脉冲型 PUF。
-至此，本文一共分析了5种不同的 PUF 结构，表\ref{tab:puf_cmp}对其基本信息做了整理，表\ref{tab:puf_nist}展示了所有 PUF 的 NIST 测试结果\footnote{每PUF测试100个器件仿真结果取32768比特响应}。
+至此，本文一共分析了5种不同的 PUF 结构，表\ref{tab:puf_cmp}对其基本信息做了整理，表\ref{tab:puf_nist}展示了所有 PUF 的 NIST 测试结果\footnote{每PUF测试100个器件仿真，收集32768比特响应。Random 测试由于数据不支持没有结果。}。
 在图\ref{fig:pufs_rand}中绘出所有 PUF 的随机性分布拟合曲线，图\ref{fig:pufs_uniq}则绘出了独特性的拟合曲线。
 
 \begin{table}[htb]
@@ -231,8 +231,8 @@ Universal & 0 & 0 & 0 & 0 & 0 \\
 Approximate Entropy & 39 & 32 & 4 & 19 & 37\\
 Serial & 87.5 & 83.5 & 22.5 & 58 & 86.5\\
 Linear Complexity & 100 & 98 & 90 & 98 &99 \\
-Random Excursions & - & - & - & - &\\
-Random Excursions Variant & - & - & - & - &\\
+Random Excursions & - & - & - & - & -\\
+Random Excursions Variant & - & - & - & - & -\\
 Overlapping Template & 61 & 55 & 10 & 28 & 53 \\
 Nonperiodic Template & 88.4 & 86.4 & 34.0 & 70.1 & 88.3\\
 \hline
