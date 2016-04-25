@@ -15,13 +15,21 @@
 1945年克劳德·香农（ Claude E Shannon ）在其经典著作《密码学的数学原理》\supercite{shannon1945mathematical} 指出密码设计的两个原则：扩散（ Diffusion ）和扰乱（ Confusion ），这两个原则也是构造单向函数的原则。
 扩散指输入变化 1bit 会使输出变化 50\% 的 bits，扰乱指输出的每一个 bit 都是由尽可能多的输出 bit 决定。
 
-在众多的密码系统中，单向函数往往由纯数学概念构造，比如大整数因式分解（ RSA ）、椭圆曲线求解（ ECC ）、矩阵分解\supercite{wendt2013bidirectional}（ DBF ）等等，在实际的电路实现上往往硬件规模较大，或是求值时间较长，在现今有越来越多的便携设备接入网络，而在公共场合下有加密通信的需求，传统的加密方式便不适合应用在这些设备上，所以需要低功耗、低硬件开销的加密方案。
+在众多的密码系统中，单向函数往往由纯数学概念构造，比如大整数因式分解（ RSA ）、椭圆曲线求解（ ECC ）、矩阵分解\supercite{wendt2013bidirectional}（ DBF ）等等，在实际的电路实现上往往硬件规模较大，或是求值时间较长。
+而现今有越来越多的便携设备接入网络，在公共场合下有通信保密的需求。但是传统的加密方式不适合应用在这些设备上，需要更加低功耗、低硬件开销的解决方案。
 
-各种便携设备不同于传统主机，流动性大，使得其本身容易被攻击者获取（比如丢失、遭克隆等等手段，而传统攻击者获取的仅仅是信道信息），这使得以物理手段获取旁道信息破译的方法在近几年尤为引人关注。旁道信息是与密文相关的中间信息，有多种呈现方式，比如加密操作时的功耗、电磁辐射、热辐射、运算错误、存储介质状态等等\supercite{standaert2010introduction}。利用这些信息，可以快速的破译一些加密系统。如差分功耗分析法，通过相似操作的功耗差值来判断猜解密钥的正确性，大幅度削减了穷举量；又如错误分析，通过手段注入使加密系统产生运算错误，并根据出现错误的时机和现象筛选密钥；而存储介质的分析则通过电磁探测等手段直接观察存储器中的逻辑值，从而提取出关键信息。
+便携设备不同于传统主机，流动性大，使得其本身容易被攻击者获取（比如丢失、遭克隆等等手段，而传统攻击者获取的仅仅是信道信息），这使得以物理手段获取旁道信息破译的方法在近几年尤为引人关注\supercite{standaert2010introduction}。
+旁道信息是与密文相关的中间信息，有多种呈现方式，比如加密操作时的功耗、电磁辐射、热辐射、运算错误、存储介质状态等等。利用这些信息，可以快速的破译一些加密系统。
+如差分功耗分析法，通过相似操作的功耗差值来判断猜解密钥的正确性，大幅度削减了穷举量；
+又如错误分析，通过手段注入使加密系统产生运算错误，并根据出现错误的时机和现象筛选密钥；
+而存储介质的分析则通过 多种手段直接观察存储器中的逻辑值，从而提取出关键信息。比如针对非易失性存储器（Non-volatile Memory, NVM），通过侵入式或非侵入式方法可以读出其中的存储信息，如果关键密钥也是放在当中，则可能会被读取出从而获得系统权限\supercite{helfmeier2013cloning}。
+比如门禁系统中门卡的 RFID，只能保存在门卡自身的芯片内。尽管通信协议可以很好的加密通信信道内的数据，但是却不能保护芯片内部 ROM 中的信息。一个恶意攻击者一旦获取了一个门卡，则可以通过技术手段探查 ROM 中的数据提取出关键信息。
 
 针对每一种不同的攻击手段，必须分别采取防御措施。如针对差分功耗分析，使用随机掩码隐藏真正的功耗信息，增加攻击者破解的成本\supercite{rivain2010provably}；针对错误注入，加入探测机制阻止系统在出错的时候暴露关键信息\supercite{karaklajic2013hardware}；而针对存储介质的攻击，则可以采用 PUF 技术隐式存储关键数据。
 
-在 PUF 技术出现之前，双方通信中关键的密钥往往直接存储在非易失性存储器（如只读存储器 ROM ）中。比如门禁系统中门卡的 RFID，只能保存在门卡自身的芯片内。尽管通信协议可以很好的加密通信信道内的数据，但是却不能保护芯片内部 ROM 中的信息。一个恶意攻击者一旦获取了一个门卡，则可以通过技术手段探查 ROM 中的数据提取出关键信息。而 PUF 则以加密系统的物理实现自身特点存储信息，相较于 ROM 等传统非易失性存储器，具有隐秘性好，不可探查等特点，因此受到了相关领域研究者的广泛关注。
+在 PUF 技术出现之前，采用物理手段或者特殊工艺防止对存储器的非法读取，尤其是限制反向工程。但这样做会大大增加芯片成本，往往只用于一些高度保密的关键芯片中。
+而 PUF 则以加密系统的物理实现自身特点存储信息，相较于传统保护手段，功耗小、成本低，因此受到了相关领域研究者的广泛关注。
+而且随着研究深入，人们发现 PUF 的特点也可以使其应用于其他加密场景，比如 IP 保护\supercite{Guajardo2007fpga,kumar2008butterfly}，不经意传输协议\supercite{ruhrmair2010oblivious}，密钥交换\supercite{rostami2014robust}，比特承诺\supercite{ruhrmair2012practical}等等。
 
 \section{PUF相关研究}\label{sec:PUF-research}
 Physical Unclonable Function（ PUF ）最早由 MIT 的理学博士 Pappu S. Ravikanth 于 2001 年提出\supercite{pappu2002physical}，而其最初被称为 Physical One-Way Function 。
@@ -39,12 +47,15 @@ Gassend 提出了基于硅基电路实现的 PUF，他用一系列双口交换�
 其三是 PUF 的应用领域，构建基于 PUF 的密码协议。
 
 2004 年 MIT 的 Daihyun Lim 在其硕士毕业论文\supercite{lim2005extracting}提出对 Arbiter-PUF 建模，并用支持向量机（ SVM ）拟合出 Arbiter-PUF 的模型参数，开启了机器学习对 PUF 的建模攻击领域。
-此后，接着机器学习崛起的东风， PUF 研究在攻防两方的博弈中迅速崛起，近几年来吸引了越来越多的研究者和相关会议关注这一领域。
+2007 年 Guajardo 在 \parencite{Guajardo2007fpga} 中提出 ``Weak'' 和 ``Strong'' 的概念，此后人们接受并将 PUF 按此标准人为分成两类： Strong PUF 和 Weak PUF，它们相关定义和具体区别见\ref{subsec:weakpuf}小节。 Weak PUF 多是基于 SRAM 类型，应用于密钥生成，芯片指纹等场合； Strong PUF 主要有基于延迟和基于环振两种类型，应用场合比 Weak PUF 丰富许多，但是 Strong PUF 易受到建模攻击，其根本原因是由于其输入-输出对（CRP）的秩不够大，容易根据一部分子集推算出剩余未知 CRP ，这就是建模攻击的基本原理。
+针对这一点， 研究者开始评价 Strong PUF 的非线性特点。 Katzenbeisser 等人在\parencite{katzenbeisser2012pufs}中评价了多种现有 PUF 的安全特性，其中属于 Strong PUF 的 Arbiter PUF 和 RO PUF 的信息熵\footnote{信息熵反应信息流的内容含量，单位是比特。文中用的是条件信息熵}都比较低。
+在提升 Strong PUF 熵的研究上，有 Suh 的异或 PUF\supercite{suh2007physical}， Majzoobi 等人的 Lightweight PUF \supercite{majzoobi2008lightweight}， Chen 的 Bistable Ring PUF\supercite{chen2011bistable}，还有 Kumar 和 Burleson 的电流镜 PUF\supercite{kumar2014design}。
 
-首先， 以 Arbiter PUF 为代表的 Strong PUF 非常易于密码协议的实现，但由于其输入-输出对（CRP）的秩不够大，容易根据一部分子集推算出剩余未知 CRP ，这就是建模攻击的基本原理。
-其次，建模攻击所利用的机器学习算法在近几年得到了长足发展，使得研究者可以在相对很短的时间内进行推算，并且处理大量数据，使得大部分 Strong PUF 都能在可接受的时间内被建模攻击复制，从而否定了其安全性。
-最后，高安全性 PUF 的设计尚未有明确的指导性原理，目前尚处于探索阶段，一般而言，设计者通过提高 PUF 的模型复杂度，使得攻击者（在现有计算能力下）不能在可接收时间范围内计算出 PUF 模型。比如 Lim 在\parencite{lee2004technique}中提出 Feed-forward PUF，使某几位输入受自身前馈信号控制； Suh 和 Devadas 在\parencite{suh2007physical}中提出了异或的方式提升模型非线性度。
-但相对而言，对于 PUF 的建模比较系统和完备，攻击者往往能够定量的分析特定 PUF 的设计特点，计算出建模复杂度，对于超出计算能力的部分用辅助手段进行剪枝\supercite{mahmoud2013combined,xu2014hybrid}，故而使得 PUF 在抗建模攻击的设计上尤为困难。
+然而，建模攻击所利用的机器学习算法，以及并行计算，分布式计算等技术在近几年同样得到了长足发展，使得研究者可以在相对很短的时间内进行推算，并且处理大量数据。
+因此可以将 Strong PUF 进行如下分类：已建模、尚未建模和不可建模。已建模的 PUF 可以按建模攻击的运算时间评价好坏；尚未建模的 PUF 需要寻找到合适的模型或者证明其不可建模；不可建模的 PUF 理论上则是完全不受建模攻击威胁，但目前为止没有人提出过不可建模 PUF。
+Mahmoud 等人用分布式集群对 Lightweight, Arbiter 和 XOR 三种 PUF 做了建模攻击和时间统计\supercite{mahmoud2013combined,xu2014hybrid}，已建模的 PUF 原则上一定会被机器学习拟合出模型参数，但是越复杂的模型拟合时间越长，如果超出了计算能力，则可以认为这样的 PUF 也可以抵御建模攻击。
+但是 Mahmoud 利用旁道攻击方法对复杂模型进行中间值提取，从而降低了模型复杂度，大大缩短了计算时间。
+所以传统的异或、前馈等方式不能从根本上解决建模攻击的威胁。
 
 到目前为止， PUF 技术尚未成熟到商用地步，主要有以下几个技术难点。
 \begin{itemize}
@@ -55,7 +66,7 @@ Gassend 提出了基于硅基电路实现的 PUF，他用一系列双口交换�
 \end{itemize}
 
 \section{本文主要工作和文章结构}\label{sec:mainworks}
-双稳环路 PUF 是 Chen 在\parencite{chen2011bistable}提出的新型 Strong PUF，已有的分析工作指出 BRPUF 的扩散（Diffusion）性不好，以及输出分布不均\supercite{chen2012characterization,yamamoto2014security}。
+双稳环路 PUF 是 Chen 在\parencite{chen2011bistable}提出的新型 Strong PUF，尚未被建模，但已有的分析工作指出 BRPUF 的扩散（Diffusion）性不好，以及输出分布不均\supercite{chen2012characterization,yamamoto2014security}。
 Schuster 等人在\parencite{schuster2014evaluation}中使用单层神经网络对BRPUF进行建模攻击并得到了90\%的预测率。
 本文在前人研究基础上，从基本原理入手，分析 BRPUF 的电气原理，提出了精确描述模型，成功对其进行了建模攻击并达到了99\%以上的预测率。
 针对机器学习建模攻击，提出了新型结构——基于随机脉冲的PUF。主要研究成果有以下几点：
@@ -65,4 +76,4 @@ Schuster 等人在\parencite{schuster2014evaluation}中使用单层神经网络�
 \item 第三，仿真与实验。在 FPGA 上实现改进电路，通过 PCI-E 接口与 PC 通信，收集并测试大量的输出数据验证其性能指标。
 \end{itemize}
 
-文章分为5个章节，此为序章。第\ref{chap:preliminary}章主要阐述本文设计的基础知识；第\ref{chap:buildingmodel}章说明建模方法和安全性理论证明；第\ref{chap:dbrpuf}、\ref{chap:rpapuf}章则阐述本文提出的两种改进结构以及在 FPGA 的实现方法和实验结果；最后第\ref{chap:conclusion}章进行总结和提出展望。
+文章分为6个章节，此为序章。第\ref{chap:preliminary}章主要阐述本文设计的基础知识；第\ref{chap:buildingmodel}章说明建模方法和安全性理论证明；第\ref{chap:dbrpuf}、\ref{chap:rpapuf}章则阐述本文提出的两种改进结构以及在 FPGA 的实现方法和实验结果；最后第\ref{chap:conclusion}章进行总结和提出展望。

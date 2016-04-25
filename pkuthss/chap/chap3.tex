@@ -3,6 +3,7 @@
 % Public domain.
 
 \chapter{延迟环路PUF设计}\label{chap:dbrpuf}
+在本章我们针对 BRPUF 进行改进，使 CRP 的统计分布趋于理想值。
 
 \section{电路结构}\label{sec:dbrpuf_scheme}
 从第\ref{chap:buildingmodel}章的讨论看出， BRPUF 输出分布扩散在（0,1）几乎呈均匀分布，这是 PUF 设计所不愿意看到的，其根本原因在于环路结构使得每一个环路中与非门的延迟波动产生叠加，造成了最终输出均值较大波动，在工艺方差不变的前提下，输出分布方差退化为工艺方差的N倍（N为级数），故N级数越高， BRPUF 输出分布越差。
