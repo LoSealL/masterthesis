@@ -3,27 +3,31 @@
 % Public domain.
 
 \begin{cabstract}
-信息安全是现在各项系统设计重中之重，单向函数是信息安全协议的基础之一。物理不可克隆函数（PUF）是实现单向函数的一种物理手段，利用未知物理系统的观测点实现激励到响应的映射函数。
+信息安全是现在各项系统设计重中之重，单向函数是信息安全协议的基础之一。物理不可克隆函数（Physical Unclonable Function, PUF）是实现单向函数的一种物理手段，利用未知物理系统的观测点实现激励到响应的映射函数。
 PUF适合于有安全性需求的移动端芯片，有着低功耗、高集成度、高安全性等特点。
 
 本文研究了 PUF 在电路系统的实现方法，论文的主要工作和创新点包括：
-第一，利用统计方法对现有的多种 PUF 方案进行分析对比，建立数学模型描述电路行为，并从模型特征总结出各 PUF 优劣。
-第二，提出了延迟型双稳态 PUF 设计方案，其结合了仲裁型 PUF 和双稳态 PUF 的优点，改进了双稳态 PUF 响应存在偏置的不足，且在 FPGA 上实现了电路并采样验证。
-第三，设计了随机脉冲采样 PUF，该结构利用短脉冲传播的不稳定特性，引入随机变量，使得电路行为更加难以建模预测，增强了其抵御建模攻击的能力；同时通过真负边沿采样异或运算，增加了建模的空间复杂度，使得攻击者需要极大量的运算代价对此结构进行建模。最终实验结果显示，设计二具有极好的统计结果和抗建模攻击的能力，其面积开销也是标准 2-XOR PUF 的一半。
+第一，
+提出了一种精确描述双稳态环路 PUF 的数学模型，可以使建模攻击在5000个训练点达到99\%预测率。
+第二，
+提出了延迟型双稳态 PUF （DBRPUF）设计方案，其结合了仲裁型 PUF 和双稳态环路 PUF 的优点，改进了双稳态 PUF 响应存在偏置的不足，且在可编程门阵列 (FPGA) 上实现了电路并采样验证。
+第三，
+设计了随机脉冲采样 PUF （RPAPUF），该结构利用短脉冲传播的不稳定特性，引入随机变量，使得电路行为更加难以建模预测，增强了其抵御建模攻击的能力；
+同时通过真负边沿采样异或运算，增加了建模的空间复杂度，使得攻击者需要极大量的运算代价对此结构进行建模。
 
-最后本文比较了新提出结构在内的多个 PUF 的统计分布、 NIST 测试结果和 SVM 预测结果。
+最后本文比较了新提出结构在内的多个 PUF 的统计分布、 NIST 测试结果和建模攻击预测结果。实验结果显示本文提出的 DBRPUF 的随机性标准差为0.1，是 BRPUF 的1/3，独特性标准差为0.03，是 BRPUF的1/5；而 RPAPUF 的随机性标准差小于0.1，独特性标准差小于0.02，对其建模攻击的预测率不超过67\%。
 	
 \end{cabstract}
 
 \begin{eabstract}
-Modern system design concerns more and more about security. As one of the basic foundation of crypto-protocols, one-way function and its implementation takes efforts to do so. Physical Unclonable Functions (PUF) is an alternative to one-way function. PUF ultilizes physical system which is unknown to mankind to set up a projection from challenges to responses. This physical disorder based system, which has low energy consumption and high density, is quite suitable for security portable chips.
+Modern system design concerns more and more about security. As one of the basic foundation of crypto-protocols, one-way function and its implementation takes efforts to do so. Physical Unclonable Functions (PUF) is an alternative to one-way function. PUF utilizes the physical system which is unknown to mankind to set up a projection from challenges to responses. This physical-disorder based system, which has low energy consumption and high density, is quite suitable for portable security chips.
 
-In this paper, we analyze and implment PUF in Field Programmable Gate Array, and investigate the randomness, uniqueness and reliability of the PUFs.
-We also build models for these PUFs and extract characteristics from the model.
-We propose two novel PUF designs. One of them combines the advantage of arbiter PUF and bistable ring PUF, the experiments on FPGA demonstrate it improves the randomness and uniqueness compared to BRPUF.
-The other one refered to as random pulse based arbiter PUF, introduces a random bit with a random input pulse signal to confuse the one who wants to model it. The experiment results show the propsoed RPAPUF has a significant increment on space and time complexity of building a model for it.
+In this paper, I analyzed and implemented PUF in Field Programmable Gate Array (FPGA), and investigated the randomness, uniqueness and reliability of the Arbiter/Bistable-Ring/XOR PUFs.
+I also built an accuracy models for Bistable Ring PUF and extract characteristics from the model. The modeling attack to BRPUF via this model archives 99\% prediction rate.
+This paper proposed two novel PUF designs. One combines the advantage of the Arbiter PUF and the Bistable Ring PUF. The experiment on FPGA demonstrated that it can improve the randomness and uniqueness compared to the BRPUF.
+The other one, referred to as Random Pulse Arbiter PUF (RPAPUF), introduces a random bit with a random input pulse signal to confuse the attacker who wants to predict it. The experimental results indicate the proposed RPAPUF has a significant increment on the space and the time complexity of building models for it.
 
-In the end, we summarize the NIST test results and SVM learning results for all mentioned PUFs.
+In the end, this paper summarized the statistical and NIST test results and modeling attack results for all mentioned PUFs.
 
 \end{eabstract}
 

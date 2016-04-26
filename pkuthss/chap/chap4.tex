@@ -111,6 +111,13 @@ PAPUF 的模型和统计分布与 XOR PUF 相同，具体参见\ref{sec:relatedw
 R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 \end{equation}
 
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=.8\linewidth]{xorpuf_svm_randompoints}
+\caption{XOR PUF预测率与训练集随机点占比的关系}
+\label{fig:xor-svm-random}
+\end{figure}
+
 假设一种理想模型，即在 PAPUF 的 CRP 中``1''严格地占50\%；而在 RPAPUF 中，随机码 s 严格遵循均匀分布。
 则在 RPAPUF 中将整个 CRP 集合分为3个子集，记作 $ P_{0}, P_{1}, P_{2} $ ，分别表示脉冲信号都完整传递的 CRP 集合、有且仅有一种脉冲信号完整传递的 CRP 集合和两种脉冲信号全都消失的 CRP 集合。
 对于 $ P_0 $， 有响应 $ R(i) = f_{xor}(C_i) $, $ f_{xor} $ 即 XOR PUF 的表征模型，具体参见\ref{subsec:xormethod}节的内容。
@@ -122,13 +129,6 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 易知，若随机点过少，则不会对建模造成影响，因为SVM学习过程中有``惩罚系数''可以过滤掉这部分数据，但是当随机点在训练CRP中占比上升，则训练效果会直线下降。
 图\ref{fig:xor-svm-random}显示了用10000个CRP作为训练集学习 XOR PUF 模型参数，当随机点占比变化时预测率的变化。
 
-\begin{figure}[htb!]
-\centering
-\includegraphics[width=.8\linewidth]{xorpuf_svm_randompoints}
-\caption{XOR PUF预测率与训练集随机点占比的关系}
-\label{fig:xor-svm-random}
-\end{figure}
-
 下面考虑对 RPAPUF 的建模攻击。
 首先，攻击者必须对每一个激励重复若干次，以抛弃掉脉冲``消失''的（或``随机''的） CRP，因为消失的响应不满足 XOR PUF 模型；其次，对于剩下的 CRP ，有一部分属于 $ P_1 $ 。 即虽然该部分 CRP 某些脉冲激励``消失''了，但响应输出与随机码 s 无关，因此无法被攻击者过滤掉，所以攻击者只有50\%的概率判断此 CRP 的脉冲是否消失。
 对于正常情况，响应仍满足 XOR PUF 的模型，但对于消失脉冲，第i级以后的的交换器不再产生作用，因此攻击者需要遍历N个节点，以寻找在哪个节点脉冲消失了。故建模的复杂度远远超过 $ m\cdot n^2 $ 量级\footnote{$ m $是SVM训练集中CRP个数，$ n^2 $是最小线性可分维度。}。
@@ -136,12 +136,14 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 综上，使用者以 CRP 缩小的代价换取复杂度的显著提升，图\ref{fig:xor-svm-random}显示，为了达到最大效果， 应调节脉宽宽度使得 CRP 全集中至少50\%的脉冲不能传递到寄存器。
 故 RPAPUF 以多次求值和 CRP 缩小一半的单价提升了建模复杂度。
 
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=.8\linewidth]{rpapuf_rand_pw100_filter}
+\caption{RPAPUF 100次采样过滤随机响应后的随机性分布}
+\label{fig:rpa-k100-rand}
+\end{figure}
 
 \section{仿真验证}\label{sec:rpa_simu}
-与\ref{chap:buildingmodel},\ref{chap:dbrpuf}章相同，采用 HSPICE 与 Matlab 结合的方式仿真。
-不过由于本结构 RPAPUF 建模困难，采用迭代算法算出每一级交换器的输出延时，并判断该节点脉冲信号是否消失——若消失，则退出迭代，输出寄存器赋值``0''或``1''；否则迭代到N并计算延迟差。
-
-脉冲宽度会显著影响结果，我们取宽度 $ w/d={1,10,100,1000} $，即倍率指数增长，1倍意味着根本没有任何脉冲信号能传递到寄存器，采样的值永远随着脉冲变化，因此响应因为随机值；1000倍意味着所有脉冲都能传递到寄存器，与正负脉冲无关，所以退化到PA PUF 。根据不同的脉宽，统计100个 PUF，每个 PUF 随机输入4096个32位激励得到的响应。图\ref{fig:rpa-single-rand}展示了 RPAPUF 的单次采样下随机性分布示意图。
 
 \begin{figure}[htb!]
 \centering
@@ -161,21 +163,8 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 \label{fig:rpa-single-rand}
 \end{figure}
 
-可以看出，随着w的变化，R的输出分布变化并不明显，说明宏观上难以分辨出脉冲信号是否传递到寄存器，若采用 XOR PUF 建模方法，则会严重受到随机脉冲的干扰。
-图\ref{fig:rpa-k100-rand}是脉宽延时比设为100时经过100次采样过滤后的随机性分布。
-
-\begin{figure}[htb!]
-\centering
-\includegraphics[width=.8\linewidth]{rpapuf_rand_pw100_filter}
-\caption{RPAPUF 100次采样过滤随机响应后的随机性分布}
-\label{fig:rpa-k100-rand}
-\end{figure}
-
-我们尝试用 XOR PUF 的模型对 RPAPUF 进行建模攻击， 图\ref{fig:rpa-svm}展示了对 32 位 RPAPUF 的攻击结果，虚线为训练集 CRP 单次采样的结果，即不分辨``消失''脉冲；
-实线为训练集 CRP 多次采样，抛弃随机变化的点，能够过滤到部分``消失''脉冲。
-图\ref{fig:rpa-svm-devices}显示训练集CRP在10000个的情况下，不同PUF在SVM建模后的预测率，横轴对应的是不同的器件。
-可以看出无论响应过滤与否均不能达到很好的效果， 即使过滤掉部分随机 CRP，预测率并不会随着训练集 CRP 增加而增多。
-同时也看出，随着片间分布变化，在某些情况下，恰好随机脉冲作用不明显（比如几乎没有消失，或者消失掉的部分恰好符合模型函数），使得有几个 PUF器件的点预测率非常高，这给我们留下了下一步的工作——分析随机脉冲在片内和片间的分布，尤其是脉冲宽度与工艺之间取何值最优。在现在的工作中囿于计算能力，不能再进一步分析。
+与\ref{chap:buildingmodel},\ref{chap:dbrpuf}章相同，采用 HSPICE 与 Matlab 结合的方式仿真。
+不过由于本结构 RPAPUF 建模困难，采用迭代算法算出每一级交换器的输出延时，并判断该节点脉冲信号是否消失——若消失，则退出迭代，输出寄存器赋值``0''或``1''；否则迭代到N并计算延迟差。
 
 \begin{figure}[htb!]
 \centering
@@ -184,6 +173,9 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 \label{fig:rpa-svm}
 \end{figure}
 
+
+脉冲宽度会显著影响结果，我们取宽度 $ w/d={1,10,100,1000} $，即倍率指数增长，1倍意味着根本没有任何脉冲信号能传递到寄存器，采样的值永远随着脉冲变化，因此响应因为随机值；1000倍意味着所有脉冲都能传递到寄存器，与正负脉冲无关，所以退化到PA PUF 。根据不同的脉宽，统计100个 PUF，每个 PUF 随机输入4096个32位激励得到的响应。图\ref{fig:rpa-single-rand}展示了 RPAPUF 的单次采样下随机性分布示意图。
+
 \begin{figure}[htb!]
 \centering
 \includegraphics[width=.8\linewidth]{rpa_svm_devices}
@@ -191,8 +183,28 @@ R=Q_1\oplus Q_3\oplus (Q_1\cdot Q_2\cdot Q_3\cdot Q_4)
 \label{fig:rpa-svm-devices}
 \end{figure}
 
-\section{几种PUF结构横向对比暨本章小结}\label{sec:rpa_summary}
+可以看出，随着w的变化，R的输出分布变化并不明显，说明宏观上难以分辨出脉冲信号是否传递到寄存器，若采用 XOR PUF 建模方法，则会严重受到随机脉冲的干扰。
+图\ref{fig:rpa-k100-rand}是脉宽延时比设为100时经过100次采样过滤后的随机性分布。
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=.8\linewidth]{svm_all}
+\caption{不同PUF SVM预测率对比}
+\label{fig:svm_all}
+\end{figure}
+
+我们尝试用 XOR PUF 的模型对 RPAPUF 进行建模攻击， 图\ref{fig:rpa-svm}展示了对 32 位 RPAPUF 的攻击结果，虚线为训练集 CRP 单次采样的结果，即不分辨``消失''脉冲；
+实线为训练集 CRP 多次采样，抛弃随机变化的点，能够过滤到部分``消失''脉冲。
+图\ref{fig:rpa-svm-devices}显示训练集CRP在10000个的情况下，不同PUF在SVM建模后的预测率，横轴对应的是不同的器件。
+可以看出无论响应过滤与否均不能达到很好的效果， 即使过滤掉部分随机 CRP，预测率并不会随着训练集 CRP 增加而增多。
+同时也看出，随着片间分布变化，在某些情况下，恰好随机脉冲作用不明显（比如几乎没有消失，或者消失掉的部分恰好符合模型函数），使得有几个 PUF器件的点预测率非常高，这给我们留下了下一步的工作——分析随机脉冲在片内和片间的分布，尤其是脉冲宽度与工艺之间取何值最优。在现在的工作中囿于计算能力，不能再进一步分析。
+
+
+
+\section{几种PUF结构横向对}\label{sec:rpa_summary}
+
 本节提出并分析了新型随机脉冲型 PUF。
+
 至此，本文一共分析了5种不同的 PUF 结构，表\ref{tab:puf_cmp}对其基本信息做了整理，表\ref{tab:puf_nist}展示了所有 PUF 的 NIST 测试结果\footnote{每PUF测试100个器件仿真，收集32768比特响应。Random 测试由于数据不支持没有结果。}。
 在图\ref{fig:pufs_rand}中绘出所有 PUF 的随机性分布拟合曲线，图\ref{fig:pufs_uniq}则绘出了独特性的拟合曲线。
 
@@ -239,25 +251,30 @@ Nonperiodic Template & 88.4 & 86.4 & 34.0 & 70.1 & 88.3\\
 \end{tabular}
 \end{table}
 
-\begin{figure}[htb]
+\begin{figure}[htb!]
 \centering
-\includegraphics[width=.8\linewidth]{rand_5pufs}
+\includegraphics[width=.75\linewidth]{Rand_dist}
 \caption{PUF随机性分布拟合曲线}
 \label{fig:pufs_rand}
 \end{figure}
 
-\begin{figure}[htb]
+可以看出，综合比较， DBRPUF 优于 BRPUF，但两者相比于传统仲裁型 PUF 在随机性上仍不足。
+
+\begin{figure}[htb!]
 \centering
-\includegraphics[width=.8\linewidth]{uniq_5pufs}
+\includegraphics[width=.75\linewidth]{HD_dist}
 \caption{PUF独特性分布拟合曲线}
 \label{fig:pufs_uniq}
 \end{figure}
 
-可以看出，综合比较， DBRPUF 优于 BRPUF，但两者相比于传统仲裁型 PUF 在随机性上仍不足。改进后的 XOR PUF 和 RPAPUF 则在统计结果上优于传统仲裁型 PUF，而本文所提出的 RPAPUF 在面积上优于 XOR PUF。最后，图\ref{fig:svm_all}给出了 SVM 机器学习结果，根据我们的建模，仲裁型 PUF 和 BRPUF 能够用1000个训练集达到95\%以上的预测成功率，而 XOR PUF 则需要超过5000个训练集，耗费数倍时间才能达到95\%的成功率。对于 RPAPUF，因为建模困难，我们用 XOR PUF 的模型进行学习，可以看出直接学习的成功率仅有50\%，根随机猜测一样，而经过多次采样过滤后的预测成功率最高也仅达到67\%，在有限的时间内并不能更进一步提升其预测率，故安全性上评价总结见表\ref{tab:puf_cmp}。
+改进后的 XOR PUF 和 RPAPUF 则在统计结果上优于传统仲裁型 PUF，而本文所提出的 RPAPUF 在面积上优于 XOR PUF。
+最后，图\ref{fig:svm_all}给出了 SVM 机器学习结果，根据我们的建模，仲裁型 PUF 和 BRPUF 能够用1000个训练集达到95\%以上的预测成功率，而 XOR PUF 则需要超过5000个训练集，耗费数倍时间才能达到95\%的成功率。
+对于 RPAPUF，本文没有尝试对其进行建模，故用 XOR PUF 的模型进行学习。
+可以看出，直接学习的成功率仅有50\%，根随机猜测一样。
+而经过多次采样过滤后的预测成功率最高也仅达到67\%，在有限的时间内并不能更进一步提升其预测率，故安全性上评价总结见表\ref{tab:puf_cmp}。
 
-\begin{figure}[htb!]
-\centering
-\includegraphics[width=.8\linewidth]{svm_all}
-\caption{不同PUF SVM预测率对比}
-\label{fig:svm_all}
-\end{figure}
+%\clearpage
+\section{本章小结}
+
+本章实现了一种随机脉冲仲裁型 PUF。
+引入了随机变量，使得 RPAPUF 具有随机特性，让分析和建模变得困难，同时 SVM 结果说明现有模型不能对其进行很好的拟合，故 RPAPUF 具有良好的抗建模攻击能力。
