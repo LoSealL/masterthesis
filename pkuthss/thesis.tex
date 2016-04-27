@@ -36,16 +36,16 @@
 % 设定文档的基本信息。
 \pkuthssinfo{
 	cthesisname = {硕士研究生学位论文}, ethesisname = {Master Thesis},
-	ctitle = {物理不可克隆函数的建模与设计研究},
+	ctitle = {物理不可克隆函数的建模与~~设计研究},
 	etitle = {Modeling and Design of Physical Unclonable Functions},
-	cauthor = {唐文懿},
+	cauthor = {唐~文~懿},
 	eauthor = {Wenyi Tang},
 	studentid = {1301214150},
-	date = {二零一六年四月},
+	date = {二〇一六 年 四 月},
 	school = {信息科学技术学院},
 	cmajor = {微电子学与固体电子学}, emajor = {Microelectronics},
 	direction = {系统集成芯片设计及设计方法学},
-	cmentor = {贾嵩}, ementor = {Prof.\ Song Jia},
+	cmentor = {贾嵩~~副教授}, ementor = {Prof.\ Song Jia},
 	ckeywords = {物理不可克隆函数，建模攻击，FPGA，密码学},
 	ekeywords = {Physical Unclonable Function, Modeling attack, FPGAS, Cryptography}
 }
@@ -63,13 +63,14 @@
 	% 此后到下一 \pagestyle 命令之前正常排版页眉和页脚。
 	% 封面要求单面打印，故需新开右页，此处已一并实现。
 	\cleardoublepage
-	\pagestyle{plain}
+    \pagestyle{plain}
 	% 重置页码计数器，用大写罗马数字排版此部分页码。
 	\setcounter{page}{0}
 	\pagenumbering{Roman}
-
+    
 	% 版权声明。
 	\include{chap/copyright}
+    
 	% 中英文摘要。
 	\include{chap/abstract}
 	% 自动生成目录。
