@@ -273,17 +273,17 @@
 ]{chapter}
 \CTEXsetup[
 	format = {\zihao{4}\bfseries},
-	beforeskip = {20bp plus 1ex minus 0.2ex},
+	beforeskip = {18bp plus 1ex minus 0.2ex},
 	afterskip = {6bp plus 0.2ex}
 ]{section}
 \CTEXsetup[
 	format = {\fontsize{13pt}{\baselineskip}\selectfont\bfseries},
-	beforeskip = {12bp plus 1ex minus 0.2ex},
+	beforeskip = {10bp plus 1ex minus 0.2ex},
 	afterskip = {6bp plus 0.2ex}
 ]{subsection}
 \CTEXsetup[
 	format = {\zihao{-4}\bfseries},
-	beforeskip = {12bp plus 1ex minus 0.2ex},
+	beforeskip = {10bp plus 1ex minus 0.2ex},
 	afterskip = {6bp plus 0.2ex}
 ]{subsubsection}
 
